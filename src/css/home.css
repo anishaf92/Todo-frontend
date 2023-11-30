@@ -41,13 +41,17 @@ body {
   overflow-clip-margin: content-box;
   
 }
+textarea{
+  padding:10px;
+}
 .priority{
   display: flex;
 }
 .firstline{
   display:flex;
-  flex-direction: row;
+  flex-direction: column;
     align-items: center;
+    gap:10px;
     justify-content: space-between;
 }
 
@@ -140,9 +144,23 @@ button{
 }
 .last-line{
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap:10px;
 }
+.comments-list{
+  display: flex;
+  gap:10px;
+  
+}
+.comment{
+  border-color: #47616e;
+  padding: 10px;
+  margin:5px;
+  border: 2px solid;
+  border-radius: 5px;
+}
+
 
 
 

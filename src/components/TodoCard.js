@@ -127,7 +127,9 @@ const TodoCard = ({todo,id,handlePriorityChange,deleteTask,toggleRefresh}) => {
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Add a comment..."
                       />
+                      <div>
                       <button className="big-btn" onClick={() => handleAddComment(todo.id)}>Comment</button>
+                      </div>
                     </div>
                   )}
                 </div>
