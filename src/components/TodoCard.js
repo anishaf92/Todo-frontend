@@ -7,10 +7,10 @@ const TodoCard = ({todo,id,handlePriorityChange,deleteTask,toggleRefresh}) => {
     const [commentCount,setCommentCount] = useState(0);
    
     const [comments, setComments] = useState([]);
-  const [showComments, setShowComments] = useState(false);
-  const [showAddComment, setShowAddComment] = useState(false);
-  useEffect(() => {
-    const fetchComments = async () => {
+    const [showComments, setShowComments] = useState(false);
+    const [showAddComment, setShowAddComment] = useState(false);
+    useEffect(() => {
+      const fetchComments = async () => {
       try {
         const todoWithComments = await getTodoById(todo.id);
         setCommentCount(todoWithComments.comments.length);
@@ -22,87 +22,81 @@ const TodoCard = ({todo,id,handlePriorityChange,deleteTask,toggleRefresh}) => {
 
     fetchComments();
      // eslint-disable-next-line
-  }, [id]);
-  const handleAddComment = async(id) => {
-    try{
-    await addCommentToTodo(id,newComment);
+    }, [id]);
+    const handleAddComment = async id => {
+    try {
+        await addCommentToTodo (id, newComment);
+    } catch (error) {
+        console.error ('Error Adding comment:', error);
     }
-    catch (error) {
-        console.error('Error Adding comment:', error);
-      }
 
-    
-    setNewComment('');
-    setShowAddComment(false);
-    toggleRefresh();
-  };
-    const calculateDueDate = (dueDate) => {
-  
-        const currentDate = new Date();
-        const todoDueDate = new Date(dueDate);
-        const daysRemaining = Math.ceil((todoDueDate - currentDate) / (1000 * 60 * 60 * 24));
-        
-        if (daysRemaining === 0) {
-          return 'Today';
-        } else if (daysRemaining > 0) {
-          if(daysRemaining === 1){
-            return `Due in ${daysRemaining} day`;
-          }
-          else{
-            return `Due in ${daysRemaining} days`;
-          }
+    setNewComment ('');
+    setShowAddComment (false);
+    toggleRefresh ();
+    };
+    const calculateDueDate = dueDate => {
+    const currentDate = new Date ();
+    const todoDueDate = new Date (dueDate);
+    const daysRemaining = Math.ceil (
+        (todoDueDate - currentDate) / (1000 * 60 * 60 * 24)
+    );
+
+    if (daysRemaining === 0) {
+        return 'Today';
+    } else if (daysRemaining > 0) {
+        if (daysRemaining === 1) {
+        return `Due in ${daysRemaining} day`;
         } else {
-          return `Overdue by ${-daysRemaining} days`;
+        return `Due in ${daysRemaining} days`;
         }
-      };
-      const handleCompleteTask = async (id) => {
-        try {
-          await updateTodo(id, null, true); // Set completed to true
-        } catch (error) {
-          console.error('Error completing task:', error);
-        }
-        
-      };
-  return (
-    <div key={id} className='card'>
-       
-            
-            
-    <div className="todo-item" >
-      <div className='firstline'>
-      <div className="todo-title"  >{todo.title}
-      </div>
-      <div className='priority'>
-      <input
-  type="radio"
-  name={`priority-${todo.id}-low`}  // Use todo.id instead of id
-  value="low"
-  checked={todo.priority === 'low'}
-/>
-<span onClick={() => handlePriorityChange(todo.id, 'low')} className="priority-dot low" />
-<input
-  type="radio"
-  name={`priority-${todo.id}-medium`}  // Use todo.id instead of id
-  value="medium"
-  checked={todo.priority === 'medium'}
-/>
-<span onClick={() => handlePriorityChange(todo.id, 'medium')} className="priority-dot medium" />
-<input
-  type="radio"
-  name={`priority-${todo.id}-high`}  // Use todo.id instead of id
-  value="high"
-  checked={todo.priority === 'high'}
-/>
-<span onClick={() => handlePriorityChange(todo.id, 'high')} className="priority-dot high" />
-</div>
-      </div>
-     
-      <div className='blinking-text'>{calculateDueDate(todo.dueDate)}</div>
-      <div className="description">
-        {todo.description}
-      </div>
+    } else {
+        return `Overdue by ${-daysRemaining} days`;
+    }
+    };
+    const handleCompleteTask = async id => {
+    try {
+        await updateTodo (id, null, true); // Set completed to true
+    } catch (error) {
+        console.error ('Error completing task:', error);
+    }
+    };
 
-      <div className="last-line">
+  return (
+    <div key={id} className='card'>      
+        <div className="todo-item" >
+        <div className='firstline'>
+        <div className="todo-title"  >{todo.title}</div>
+        <div className='priority'>
+            <input
+                type="radio"
+                name={`priority-${todo.id}-low`}  // Use todo.id instead of id
+                value="low"
+                checked={todo.priority === 'low'}
+            />
+    <span onClick={() => handlePriorityChange(todo.id, 'low')} className="priority-dot low" />
+    <input
+        type="radio"
+        name={`priority-${todo.id}-medium`}  // Use todo.id instead of id
+        value="medium"
+        checked={todo.priority === 'medium'}
+    />
+    <span onClick={() => handlePriorityChange(todo.id, 'medium')} className="priority-dot medium" />
+    <input
+        type="radio"
+        name={`priority-${todo.id}-high`}  // Use todo.id instead of id
+        value="high"
+        checked={todo.priority === 'high'}
+    />
+    <span onClick={() => handlePriorityChange(todo.id, 'high')} className="priority-dot high" />
+    </div>
+        </div>
+        
+        <div className={todo.completed?"":'blinking-text'}>{calculateDueDate(todo.dueDate)}</div>
+        <div className="description">
+            {todo.description}
+        </div>
+
+        <div className="last-line">
       {showAddComment ? (
           <>
             
@@ -154,13 +148,6 @@ const TodoCard = ({todo,id,handlePriorityChange,deleteTask,toggleRefresh}) => {
       <div onClick={() => deleteTask(todo.id)} className="delete-btn" title="Delete Task" />
       
       </div>
-
-      
-      
-    
-   
-{/* </li>
-</ul> */}
 </div>
   )
 };
